@@ -76,10 +76,13 @@
             letter-spacing: -0.5px;
         }
 
+        /* 优化弹窗容器，防止被遮挡 */
         .header-controls {
             display: flex;
             align-items: center;
             gap: 15px;
+            position: relative; /* 为绝对定位的弹窗提供参考 */
+            z-index: 1000; /* 确保控制区域在最上层 */
         }
 
         .theme-toggle, .address-selector, .refresh-settings, .price-toggle {
@@ -98,12 +101,12 @@
             transition: var(--transition);
         }
 
-        .theme-toggle:hover, .address-selector:hover, .refresh-settings:hover, .price-toggle:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
+        /* 优化地址选择器容器，防止弹窗被遮挡 */
+        .address-selector, .refresh-settings, .price-toggle {
+            position: relative; /* 为下拉菜单提供定位上下文 */
         }
 
+        /* 优化弹窗样式 */
         .dropdown {
             position: absolute;
             top: 100%;
@@ -114,10 +117,13 @@
             padding: 15px;
             min-width: 250px;
             box-shadow: var(--shadow);
-            z-index: 100;
+            z-index: 1001; /* 确保弹窗在控制区域之上 */
             margin-top: 5px;
             display: none;
             animation: fadeIn 0.3s ease;
+            /* 添加以下属性防止弹窗被遮挡 */
+            max-height: 80vh; /* 限制最大高度 */
+            overflow-y: auto; /* 内容过多时允许滚动 */
         }
 
         @keyframes fadeIn {
@@ -147,6 +153,7 @@
             margin-bottom: 15px;
         }
 
+        /* 优化弹窗内的交互元素 */
         .address-item {
             padding: 8px 10px;
             border-radius: 6px;
@@ -156,6 +163,20 @@
             justify-content: space-between;
             align-items: center;
             transition: var(--transition);
+            /* 移除可能导致抖动的transform */
+            transform: none;
+        }
+
+        .address-item:hover {
+            background-color: var(--background-color);
+            /* 移除可能导致抖动的transform */
+            transform: none;
+        }
+
+        /* 确保弹窗在卡片之上 */
+        .card {
+            position: relative;
+            z-index: 1; /* 确保卡片在弹窗之下 */
         }
 
         .address-item:hover {
@@ -679,8 +700,15 @@
             }
 
             .dropdown {
-                right: -50px;
-                min-width: 280px;
+                position: fixed; /* 在移动设备上使用固定定位 */
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                right: auto;
+                width: 90%;
+                max-width: 300px;
+                max-height: 70vh;
+                margin-top: 0;
             }
 
             .wallet-header {
