@@ -19,6 +19,7 @@
             --warning-color: #F39C12;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --card-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         [data-theme="dark"] {
@@ -94,11 +95,13 @@
             color: var(--text-secondary);
             box-shadow: var(--shadow);
             position: relative;
+            transition: var(--transition);
         }
 
         .theme-toggle:hover, .address-selector:hover, .refresh-settings:hover, .price-toggle:hover {
             background-color: var(--primary-color);
             color: white;
+            transform: translateY(-2px);
         }
 
         .dropdown {
@@ -114,6 +117,12 @@
             z-index: 100;
             margin-top: 5px;
             display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .dropdown.active {
@@ -140,10 +149,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: var(--transition);
         }
 
         .address-item:hover {
             background-color: var(--background-color);
+            transform: translateX(5px);
         }
 
         .address-item.active {
@@ -164,6 +175,7 @@
             padding: 2px 5px;
             border-radius: 3px;
             font-size: 12px;
+            transition: var(--transition);
         }
 
         .delete-btn:hover {
@@ -183,6 +195,12 @@
             border-radius: 6px;
             background: var(--background-color);
             color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .add-address-form input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(42, 91, 135, 0.2);
         }
 
         .add-address-form button {
@@ -192,6 +210,12 @@
             border-radius: 6px;
             padding: 8px;
             cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-address-form button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
         .refresh-options {
@@ -204,6 +228,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: var(--transition);
+        }
+
+        .refresh-option:hover {
+            color: var(--primary-color);
         }
 
         .refresh-option input {
@@ -227,6 +256,7 @@
             padding: 8px 12px;
             border-radius: 6px;
             display: inline-block;
+            transition: var(--transition);
         }
 
         .btc-price-display {
@@ -236,6 +266,7 @@
             padding: 8px 12px;
             border-radius: 6px;
             display: inline-block;
+            transition: var(--transition);
         }
 
         .card {
@@ -244,6 +275,31 @@
             padding: 24px;
             margin-bottom: 24px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
         }
 
         .card-title {
@@ -268,6 +324,14 @@
             border-radius: var(--card-radius);
             padding: 20px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .info-label {
@@ -280,6 +344,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary-color);
+            transition: var(--transition);
         }
 
         .info-subvalue {
@@ -298,6 +363,7 @@
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
         }
 
         th {
@@ -308,6 +374,10 @@
 
         td {
             font-size: 0.95rem;
+        }
+
+        tr:hover td {
+            background-color: var(--background-color);
         }
 
         .type-buy {
@@ -324,6 +394,24 @@
             text-align: center;
             padding: 40px;
             color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .error {
@@ -344,10 +432,12 @@
             align-items: center;
             gap: 8px;
             margin-left: auto;
+            transition: var(--transition);
         }
 
         .refresh-btn:hover {
-            opacity: 0.9;
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
         .card-header {
@@ -366,66 +456,208 @@
             margin-top: 10px;
         }
 
+        /* 市场数据样式 */
+        .market-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .market-item {
+            background: var(--surface-color);
+            padding: 15px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .market-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .market-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .market-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .market-change {
+            font-size: 0.8rem;
+            margin-top: 3px;
+            transition: var(--transition);
+        }
+
+        .change-positive {
+            color: var(--success-color);
+        }
+
+        .change-negative {
+            color: var(--accent-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: var(--background-color);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            background: var(--surface-color);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
         /* 数字动画效果 */
         .number-change {
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
         }
 
         .number-up {
             color: var(--success-color);
+            animation: pulseGreen 0.5s ease;
         }
 
         .number-down {
             color: var(--accent-color);
+            animation: pulseRed 0.5s ease;
         }
+
+        @keyframes pulseGreen {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulseRed {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* 价格趋势指示器 */
+        .trend-indicator {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 0.8em;
+        }
+
+        .trend-up {
+            color: var(--success-color);
+        }
+
+        .trend-down {
+            color: var(--accent-color);
+        }
+
+        /* 数据卡片动画 */
+        .data-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 延迟动画 */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
 
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
             }
-            
+
             header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .header-controls {
                 width: 100%;
                 justify-content: space-between;
             }
-            
+
             .wallet-info {
                 grid-template-columns: 1fr;
             }
-            
+
             table {
                 display: block;
                 overflow-x: auto;
             }
-            
+
             .card-header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .refresh-btn {
                 margin-left: 0;
                 width: 100%;
                 justify-content: center;
             }
-            
+
             h1 {
                 font-size: 1.8rem;
             }
-            
+
             .dropdown {
                 right: -50px;
                 min-width: 280px;
             }
-            
+
             .wallet-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+
+            .market-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -434,601 +666,667 @@
                 flex-direction: column;
                 gap: 10px;
             }
-            
+
             .theme-toggle, .address-selector, .refresh-settings, .price-toggle {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .card {
                 padding: 16px;
             }
-            
+
             .info-item {
                 padding: 15px;
             }
-            
+
             .info-value {
                 font-size: 1.3rem;
             }
-            
+
             .dropdown {
                 right: -80px;
                 min-width: 300px;
+            }
+
+            .market-overview {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>代币交易统计</h1>
-            <div class="header-controls">
-                <div class="price-toggle" id="priceToggle">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 1V23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span id="priceDisplay">USDT</span>
-                </div>
-                <div class="refresh-settings" id="refreshSettings">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>刷新设置</span>
-                    <div class="dropdown" id="refreshDropdown">
-                        <div class="dropdown-title">自动刷新设置</div>
-                        <div class="refresh-options">
-                            <div class="refresh-option">
-                                <input type="radio" id="refresh10s" name="refreshInterval" value="10000">
-                                <label for="refresh10s">10秒刷新</label>
-                            </div>
-                            <div class="refresh-option">
-                                <input type="radio" id="refresh30s" name="refreshInterval" value="30000">
-                                <label for="refresh30s">30秒刷新</label>
-                            </div>
-                            <div class="refresh-option">
-                                <input type="radio" id="refresh60s" name="refreshInterval" value="60000">
-                                <label for="refresh60s">60秒刷新</label>
-                            </div>
-                            <div class="refresh-option">
-                                <input type="radio" id="refreshOff" name="refreshInterval" value="0" checked>
-                                <label for="refreshOff">关闭自动刷新</label>
-                            </div>
+<div class="container">
+    <header>
+        <h1>ACORNS-持仓记录</h1>
+        <div class="header-controls">
+            <div class="price-toggle" id="priceToggle">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 1V23" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6313 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6313 13.6815 18 14.5717 18 15.5C18 16.4283 17.6313 17.3185 16.9749 17.9749C16.3185 18.6313 15.4283 19 14.5 19H6"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="priceDisplay">USDT</span>
+            </div>
+            <div class="refresh-settings" id="refreshSettings">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+                <span>刷新设置</span>
+                <div class="dropdown" id="refreshDropdown">
+                    <div class="dropdown-title">自动刷新设置</div>
+                    <div class="refresh-options">
+                        <div class="refresh-option">
+                            <input type="radio" id="refresh10s" name="refreshInterval" value="10000">
+                            <label for="refresh10s">10秒刷新</label>
+                        </div>
+                        <div class="refresh-option">
+                            <input type="radio" id="refresh30s" name="refreshInterval" value="30000">
+                            <label for="refresh30s">30秒刷新</label>
+                        </div>
+                        <div class="refresh-option">
+                            <input type="radio" id="refresh60s" name="refreshInterval" value="60000">
+                            <label for="refresh60s">60秒刷新</label>
+                        </div>
+                        <div class="refresh-option">
+                            <input type="radio" id="refreshOff" name="refreshInterval" value="0" checked>
+                            <label for="refreshOff">关闭自动刷新</label>
                         </div>
                     </div>
                 </div>
-                <div class="address-selector" id="addressSelector">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.7764 3 12 3C8.22355 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span id="currentAddressDisplay">选择钱包</span>
-                    <div class="dropdown" id="addressDropdown">
-                        <div class="dropdown-title">钱包地址</div>
-                        <div class="address-list" id="addressList">
-                            <!-- 地址列表将通过JS动态生成 -->
-                        </div>
-                        <div class="add-address-form">
-                            <input type="text" id="newAddressName" placeholder="钱包名称(可选，将自动生成)">
-                            <input type="text" id="newAddress" placeholder="钱包地址">
-                            <button id="addAddressBtn">添加钱包</button>
-                        </div>
+            </div>
+            <div class="address-selector" id="addressSelector">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.7764 3 12 3C8.22355 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="currentAddressDisplay">选择钱包</span>
+                <div class="dropdown" id="addressDropdown">
+                    <div class="dropdown-title">钱包地址</div>
+                    <div class="address-list" id="addressList">
+                        <!-- 地址列表将通过JS动态生成 -->
+                    </div>
+                    <div class="add-address-form">
+                        <input type="text" id="newAddressName" placeholder="钱包名称(可选，将自动生成)">
+                        <input type="text" id="newAddress" placeholder="钱包地址">
+                        <button id="addAddressBtn">添加钱包</button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="themeToggle">
-                    <span>切换主题</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 2V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M4.93 4.93L6.34 6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17.66 17.66L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M2 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M20 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M6.34 17.66L4.93 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M19.07 4.93L17.66 6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
             </div>
-        </header>
-
-        <div class="wallet-header">
-            <div class="wallet-address" id="walletAddressDisplay">
-                当前钱包: 加载中...
-            </div>
-            <div class="btc-price-display" id="btcPriceDisplay">
-                BTC: $--
-            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span>切换主题</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 2V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M12 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M4.93 4.93L6.34 6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M17.66 17.66L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M2 12H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M20 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M6.34 17.66L4.93 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M19.07 4.93L17.66 6.34" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
+    </header>
 
-        <div class="wallet-info">
-            <div class="info-item">
-                <div class="info-label">当前持仓</div>
-                <div class="info-value number-change" id="currentBalance">加载中...</div>
-                <div class="info-subvalue" id="currentCost">持仓成本: 加载中...</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">当前价格</div>
-                <div class="info-value number-change" id="currentPrice">加载中...</div>
-                <div class="info-subvalue" id="priceInUSD">USDT价格: 加载中...</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">持仓价值</div>
-                <div class="info-value number-change" id="portfolioValue">加载中...</div>
-                <div class="info-subvalue" id="profitLoss">盈亏: 加载中...</div>
-            </div>
+    <div class="wallet-header">
+        <div class="wallet-address" id="walletAddressDisplay">
+            当前钱包: 加载中...
         </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>交易历史</span>
-                </div>
-                <button class="refresh-btn" id="refreshData">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M23 4V10H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M1 20V14H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M3.51 9.00001C4.01717 7.5668 4.87913 6.2854 6.01547 5.27542C7.1518 4.26543 8.52547 3.55977 10.0083 3.22426C11.4911 2.88875 13.0348 2.93436 14.4952 3.35677C15.9556 3.77918 17.2853 4.56471 18.36 5.64001L23 10M1 14L5.64 18.36C6.71475 19.4353 8.04437 20.2208 9.50481 20.6432C10.9652 21.0656 12.5089 21.1113 13.9917 20.7757C15.4745 20.4402 16.8482 19.7346 17.9845 18.7246C19.1209 17.7146 19.9828 16.4332 20.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    刷新数据
-                </button>
-            </div>
-            <div id="orderHistory">
-                <div class="loading">加载交易数据中...</div>
-            </div>
-            <div class="last-update" id="lastUpdate">
-                最后更新: --
-            </div>
+        <div class="btc-price-display" id="btcPriceDisplay">
+            BTC: $--
         </div>
     </div>
 
-    <script>
-        // 默认钱包配置 - 现在为空，需要用户自行添加
-        const DEFAULT_WALLETS = [];
+    <!-- 新增市场概览卡片 -->
+    <div class="card data-card delay-1">
+        <div class="card-header">
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>ACORNS 市场概览</span>
+            </div>
+            <button class="refresh-btn" id="refreshMarketData">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23 4V10H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M1 20V14H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M3.51 9.00001C4.01717 7.5668 4.87913 6.2854 6.01547 5.27542C7.1518 4.26543 8.52547 3.55977 10.0083 3.22426C11.4911 2.88875 13.0348 2.93436 14.4952 3.35677C15.9556 3.77918 17.2853 4.56471 18.36 5.64001L23 10M1 14L5.64 18.36C6.71475 19.4353 8.04437 20.2208 9.50481 20.6432C10.9652 21.0656 12.5089 21.1113 13.9917 20.7757C15.4745 20.4402 16.8482 19.7346 17.9845 18.7246C19.1209 17.7146 19.9828 16.4332 20.49 15"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                刷新数据
+            </button>
+        </div>
+        <div id="marketData">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                加载市场数据中...
+            </div>
+        </div>
+        <div class="last-update" id="marketLastUpdate">
+            最后更新: --
+        </div>
+    </div>
 
-        // 全局变量
-        let refreshInterval = null;
-        let currentRefreshRate = 0; // 默认关闭自动刷新
-        let displayCurrency = 'USDT'; // 默认显示USDT
-        let lastValues = {}; // 存储上一次的值用于动画
+    <div class="wallet-info">
+        <div class="info-item data-card delay-2">
+            <div class="info-label">当前持仓</div>
+            <div class="info-value number-change" id="currentBalance">加载中...</div>
+            <div class="info-subvalue" id="currentCost">持仓成本: 加载中...</div>
+        </div>
+        <div class="info-item data-card delay-3">
+            <div class="info-label">当前价格</div>
+            <div class="info-value number-change" id="currentPrice">加载中...</div>
+            <div class="info-subvalue" id="priceInUSD">USDT价格: 加载中...</div>
+        </div>
+        <div class="info-item data-card delay-4">
+            <div class="info-label">持仓价值</div>
+            <div class="info-value number-change" id="portfolioValue">加载中...</div>
+            <div class="info-subvalue" id="profitLoss">盈亏: 加载中...</div>
+        </div>
+    </div>
 
-        // 主题切换功能
-        const themeToggle = document.getElementById('themeToggle');
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        // 检查本地存储的主题设置或系统偏好
-        const currentTheme = localStorage.getItem('theme') || 
-                            (prefersDarkScheme.matches ? 'dark' : 'light');
-        
-        // 应用主题
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        
-        // 切换主题
-        themeToggle.addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
+    <div class="card data-card delay-5">
+        <div class="card-header">
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>交易历史</span>
+            </div>
+            <button class="refresh-btn" id="refreshData">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23 4V10H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M1 20V14H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M3.51 9.00001C4.01717 7.5668 4.87913 6.2854 6.01547 5.27542C7.1518 4.26543 8.52547 3.55977 10.0083 3.22426C11.4911 2.88875 13.0348 2.93436 14.4952 3.35677C15.9556 3.77918 17.2853 4.56471 18.36 5.64001L23 10M1 14L5.64 18.36C6.71475 19.4353 8.04437 20.2208 9.50481 20.6432C10.9652 21.0656 12.5089 21.1113 13.9917 20.7757C15.4745 20.4402 16.8482 19.7346 17.9845 18.7246C19.1209 17.7146 19.9828 16.4332 20.49 15"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                刷新数据
+            </button>
+        </div>
+        <div id="orderHistory">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                加载交易数据中...
+            </div>
+        </div>
+        <div class="last-update" id="lastUpdate">
+            最后更新: --
+        </div>
+    </div>
+</div>
 
-        // 自动生成钱包名称
-        function generateWalletName(wallets) {
-            const walletNames = wallets.map(wallet => wallet.name);
-            let index = 1;
-            
-            // 找到下一个可用的钱包名称
-            while (walletNames.includes(`钱包${index}`)) {
-                index++;
-            }
-            
-            return `钱包${index}`;
+<script>
+    // 默认钱包配置 - 现在为空，需要用户自行添加
+    const DEFAULT_WALLETS = [];
+
+    // 全局变量
+    let refreshInterval = null;
+    let currentRefreshRate = 0; // 默认关闭自动刷新
+    let displayCurrency = 'USDT'; // 默认显示USDT
+    let lastValues = {}; // 存储上一次的值用于动画
+
+    // 主题切换功能
+    const themeToggle = document.getElementById('themeToggle');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // 检查本地存储的主题设置或系统偏好
+    const currentTheme = localStorage.getItem('theme') ||
+        (prefersDarkScheme.matches ? 'dark' : 'light');
+
+    // 应用主题
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    // 切换主题
+    themeToggle.addEventListener('click', function () {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+
+    // 自动生成钱包名称
+    function generateWalletName(wallets) {
+        const walletNames = wallets.map(wallet => wallet.name);
+        let index = 1;
+
+        // 找到下一个可用的钱包名称
+        while (walletNames.includes(`钱包${index}`)) {
+            index++;
         }
 
-        // 钱包管理
-        function getWallets() {
-            const storedWallets = localStorage.getItem('wallets');
-            return storedWallets ? JSON.parse(storedWallets) : DEFAULT_WALLETS;
+        return `钱包${index}`;
+    }
+
+    // 钱包管理
+    function getWallets() {
+        const storedWallets = localStorage.getItem('wallets');
+        return storedWallets ? JSON.parse(storedWallets) : DEFAULT_WALLETS;
+    }
+
+    function saveWallets(wallets) {
+        localStorage.setItem('wallets', JSON.stringify(wallets));
+    }
+
+    function getCurrentWallet() {
+        const wallets = getWallets();
+        if (wallets.length === 0) {
+            return null;
+        }
+        const currentIndex = parseInt(localStorage.getItem('currentWalletIndex') || 0);
+        return wallets[currentIndex];
+    }
+
+    // 删除钱包
+    function deleteWallet(walletAddress) {
+        const wallets = getWallets();
+
+        // 不能删除最后一个钱包
+        if (wallets.length <= 1) {
+            alert('至少需要保留一个钱包');
+            return false;
         }
 
-        function saveWallets(wallets) {
-            localStorage.setItem('wallets', JSON.stringify(wallets));
+        const updatedWallets = wallets.filter(wallet => wallet.address !== walletAddress);
+        saveWallets(updatedWallets);
+
+        // 如果删除的是当前选中的钱包，切换到第一个钱包
+        const currentWallet = getCurrentWallet();
+        if (currentWallet && currentWallet.address === walletAddress) {
+            localStorage.setItem('currentWalletIndex', 0);
         }
 
-        function getCurrentWallet() {
-            const wallets = getWallets();
-            if (wallets.length === 0) {
-                return null;
-            }
-            const currentIndex = parseInt(localStorage.getItem('currentWalletIndex') || 0);
-            return wallets[currentIndex];
-        }
+        return true;
+    }
 
-        // 删除钱包
-        function deleteWallet(walletAddress) {
-            const wallets = getWallets();
-            
-            // 不能删除最后一个钱包
-            if (wallets.length <= 1) {
-                alert('至少需要保留一个钱包');
-                return false;
-            }
-            
-            const updatedWallets = wallets.filter(wallet => wallet.address !== walletAddress);
-            saveWallets(updatedWallets);
-            
-            // 如果删除的是当前选中的钱包，切换到第一个钱包
+    // 格式化地址显示（前6位...后4位）
+    function formatAddress(address) {
+        if (!address) return '';
+        return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+    }
+
+    // 初始化地址选择器
+    function initAddressSelector() {
+        const addressSelector = document.getElementById('addressSelector');
+        const addressDropdown = document.getElementById('addressDropdown');
+        const addressList = document.getElementById('addressList');
+        const currentAddressDisplay = document.getElementById('currentAddressDisplay');
+        const walletAddressDisplay = document.getElementById('walletAddressDisplay');
+
+        // 更新地址显示
+        function updateAddressDisplay() {
             const currentWallet = getCurrentWallet();
-            if (currentWallet && currentWallet.address === walletAddress) {
-                localStorage.setItem('currentWalletIndex', 0);
+            if (currentWallet) {
+                currentAddressDisplay.textContent = currentWallet.name;
+                walletAddressDisplay.textContent = `当前钱包: ${currentWallet.name} (${formatAddress(currentWallet.address)})`;
+            } else {
+                currentAddressDisplay.textContent = '选择钱包';
+                walletAddressDisplay.textContent = '当前钱包: 无';
             }
-            
-            return true;
         }
 
-        // 格式化地址显示（前6位...后4位）
-        function formatAddress(address) {
-            if (!address) return '';
-            return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-        }
+        // 渲染地址列表
+        function renderAddressList() {
+            const wallets = getWallets();
+            const currentWallet = getCurrentWallet();
 
-        // 初始化地址选择器
-        function initAddressSelector() {
-            const addressSelector = document.getElementById('addressSelector');
-            const addressDropdown = document.getElementById('addressDropdown');
-            const addressList = document.getElementById('addressList');
-            const currentAddressDisplay = document.getElementById('currentAddressDisplay');
-            const walletAddressDisplay = document.getElementById('walletAddressDisplay');
-            
-            // 更新地址显示
-            function updateAddressDisplay() {
-                const currentWallet = getCurrentWallet();
-                if (currentWallet) {
-                    currentAddressDisplay.textContent = currentWallet.name;
-                    walletAddressDisplay.textContent = `当前钱包: ${currentWallet.name} (${formatAddress(currentWallet.address)})`;
-                } else {
-                    currentAddressDisplay.textContent = '选择钱包';
-                    walletAddressDisplay.textContent = '当前钱包: 无';
-                }
+            addressList.innerHTML = '';
+
+            if (wallets.length === 0) {
+                const emptyItem = document.createElement('div');
+                emptyItem.className = 'address-item';
+                emptyItem.innerHTML = '<span style="color: var(--text-secondary);">暂无钱包，请添加钱包地址</span>';
+                addressList.appendChild(emptyItem);
+                return;
             }
-            
-            // 渲染地址列表
-            function renderAddressList() {
-                const wallets = getWallets();
-                const currentWallet = getCurrentWallet();
-                
-                addressList.innerHTML = '';
-                
-                if (wallets.length === 0) {
-                    const emptyItem = document.createElement('div');
-                    emptyItem.className = 'address-item';
-                    emptyItem.innerHTML = '<span style="color: var(--text-secondary);">暂无钱包，请添加钱包地址</span>';
-                    addressList.appendChild(emptyItem);
-                    return;
-                }
-                
-                wallets.forEach((wallet, index) => {
-                    const addressItem = document.createElement('div');
-                    const isActive = currentWallet && wallet.address === currentWallet.address;
-                    addressItem.className = `address-item ${isActive ? 'active' : ''}`;
-                    addressItem.innerHTML = `
+
+            wallets.forEach((wallet, index) => {
+                const addressItem = document.createElement('div');
+                const isActive = currentWallet && wallet.address === currentWallet.address;
+                addressItem.className = `address-item ${isActive ? 'active' : ''}`;
+                addressItem.innerHTML = `
                         <span>${wallet.name} (${formatAddress(wallet.address)})</span>
                         <div class="address-item-actions">
                             ${wallets.length > 1 ? '<button class="delete-btn" title="删除钱包">×</button>' : ''}
                         </div>
                     `;
-                    
-                    // 点击选择钱包
-                    addressItem.addEventListener('click', (e) => {
-                        if (!e.target.classList.contains('delete-btn')) {
-                            localStorage.setItem('currentWalletIndex', index);
-                            updateAddressDisplay();
-                            renderAddressList();
-                            loadData();
-                            addressDropdown.classList.remove('active');
+
+                // 点击选择钱包
+                addressItem.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('delete-btn')) {
+                        localStorage.setItem('currentWalletIndex', index);
+                        updateAddressDisplay();
+                        renderAddressList();
+                        loadData();
+                        addressDropdown.classList.remove('active');
+                    }
+                });
+
+                // 删除钱包按钮
+                const deleteBtn = addressItem.querySelector('.delete-btn');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm(`确定要删除钱包 "${wallet.name}" 吗？`)) {
+                            if (deleteWallet(wallet.address)) {
+                                renderAddressList();
+                                updateAddressDisplay();
+                                loadData();
+                            }
                         }
                     });
-                    
-                    // 删除钱包按钮
-                    const deleteBtn = addressItem.querySelector('.delete-btn');
-                    if (deleteBtn) {
-                        deleteBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            if (confirm(`确定要删除钱包 "${wallet.name}" 吗？`)) {
-                                if (deleteWallet(wallet.address)) {
-                                    renderAddressList();
-                                    updateAddressDisplay();
-                                    loadData();
-                                }
-                            }
-                        });
-                    }
-                    
-                    addressList.appendChild(addressItem);
-                });
-            }
-            
-            // 切换下拉菜单显示
-            addressSelector.addEventListener('click', (e) => {
-                e.stopPropagation();
-                addressDropdown.classList.toggle('active');
-                renderAddressList();
-            });
-
-            // 添加新地址
-            document.getElementById('addAddressBtn').addEventListener('click', () => {
-                const nameInput = document.getElementById('newAddressName');
-                const addressInput = document.getElementById('newAddress');
-                
-                const name = nameInput.value.trim();
-                const address = addressInput.value.trim();
-                
-                if (!address) {
-                    alert('请填写钱包地址');
-                    return;
                 }
-                
-                const wallets = getWallets();
-                
-                // 检查地址是否已存在
-                if (wallets.some(wallet => wallet.address === address)) {
-                    alert('该钱包地址已存在');
-                    return;
-                }
-                
-                // 自动生成名称如果用户没有输入
-                const walletName = name || generateWalletName(wallets);
-                
-                wallets.push({
-                    name: walletName,
-                    address: address
-                    // 不再需要token字段
-                });
-                
-                saveWallets(wallets);
-                renderAddressList();
-                
-                // 清空表单
-                nameInput.value = '';
-                addressInput.value = '';
-                
-                // 切换到新添加的钱包
-                const newIndex = wallets.length - 1;
-                localStorage.setItem('currentWalletIndex', newIndex);
-                updateAddressDisplay();
-                loadData();
-                
-                // 关闭下拉菜单
-                addressDropdown.classList.remove('active');
-            });
-            
-            // 初始化显示
-            updateAddressDisplay();
-            
-            // 修复弹窗点击关闭问题 - 阻止弹窗内点击事件冒泡
-            addressDropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-            
-            // 点击其他地方关闭下拉菜单
-            document.addEventListener('click', () => {
-                addressDropdown.classList.remove('active');
+
+                addressList.appendChild(addressItem);
             });
         }
 
-        // 价格显示切换
-        function initPriceToggle() {
-            const priceToggle = document.getElementById('priceToggle');
-            const priceDisplay = document.getElementById('priceDisplay');
-            
-            // 从本地存储加载显示设置
-            const savedCurrency = localStorage.getItem('displayCurrency');
-            if (savedCurrency) {
-                displayCurrency = savedCurrency;
-                priceDisplay.textContent = displayCurrency;
-            }
-            
-            // 切换价格显示
-            priceToggle.addEventListener('click', () => {
-                displayCurrency = displayCurrency === 'USDT' ? 'BTC' : 'USDT';
-                priceDisplay.textContent = displayCurrency;
-                localStorage.setItem('displayCurrency', displayCurrency);
-                
-                // 重新计算并更新显示
-                updateDisplayWithCurrentData();
-            });
-        }
+        // 切换下拉菜单显示
+        addressSelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addressDropdown.classList.toggle('active');
+            renderAddressList();
+        });
 
-        // 刷新设置
-        function initRefreshSettings() {
-            const refreshSettings = document.getElementById('refreshSettings');
-            const refreshDropdown = document.getElementById('refreshDropdown');
-            
-            // 从本地存储加载刷新设置
-            const savedRefreshRate = localStorage.getItem('refreshRate');
-            if (savedRefreshRate) {
-                currentRefreshRate = parseInt(savedRefreshRate);
-                document.querySelector(`input[value="${savedRefreshRate}"]`).checked = true;
-            } else {
-                document.getElementById('refreshOff').checked = true;
-            }
-            
-            // 设置自动刷新
-            setupAutoRefresh();
-            
-            // 切换下拉菜单显示
-            refreshSettings.addEventListener('click', (e) => {
-                e.stopPropagation();
-                refreshDropdown.classList.toggle('active');
-            });
-            
-            // 修复弹窗点击关闭问题 - 阻止弹窗内点击事件冒泡
-            refreshDropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-            
-            // 监听刷新设置变化
-            document.querySelectorAll('input[name="refreshInterval"]').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    currentRefreshRate = parseInt(e.target.value);
-                    localStorage.setItem('refreshRate', currentRefreshRate);
-                    setupAutoRefresh();
-                    refreshDropdown.classList.remove('active');
-                });
-            });
-            
-            // 点击其他地方关闭下拉菜单
-            document.addEventListener('click', () => {
-                refreshDropdown.classList.remove('active');
-            });
-        }
+        // 添加新地址
+        document.getElementById('addAddressBtn').addEventListener('click', () => {
+            const nameInput = document.getElementById('newAddressName');
+            const addressInput = document.getElementById('newAddress');
 
-        // 修改自动刷新设置函数
-        function setupAutoRefresh() {
-            if (refreshInterval) {
-                clearInterval(refreshInterval);
-                refreshInterval = null;
-            }
+            const name = nameInput.value.trim();
+            const address = addressInput.value.trim();
 
-            if (currentRefreshRate > 0) {
-                // 自动刷新时不更新交易历史
-                refreshInterval = setInterval(() => loadData(false), currentRefreshRate);
-            }
-        }
-
-        // 将18位精度转换为正常数值
-        function fromWei(value) {
-            return (parseFloat(value) / 1e18).toFixed(4);
-        }
-
-        // 计算持仓平均成本
-        function calculateAverageCost(orders) {
-            // 按时间排序，确保按时间顺序处理交易
-            orders.sort((a, b) => new Date(a.completed_at_tm) - new Date(b.completed_at_tm));
-            
-            let totalTokens = 0;
-            let totalCost = 0;
-            
-            orders.forEach(order => {
-                const tokens = parseFloat(fromWei(order.total_amount));
-                
-                if (order.type === 'buy') {
-                    const cost = parseFloat(order.total_btc_amount);
-                    // 累计总持仓和总成本
-                    totalTokens += tokens;
-                    totalCost += cost;
-                } else if (order.type === 'sell') {
-                    // 对于卖出订单，我们需要按当前平均成本计算
-                    if (totalTokens > 0) {
-                        const averageCost = totalCost / totalTokens;
-                        const soldCost = tokens * averageCost;
-                        totalTokens -= tokens;
-                        totalCost -= soldCost;
-                        
-                        // 确保持仓数量和成本不会为负数
-                        totalTokens = Math.max(0, totalTokens);
-                        totalCost = Math.max(0, totalCost);
-                    }
-                }
-            });
-            
-            // 如果还有持仓，计算平均成本；否则成本为0
-            if (totalTokens > 0 && totalCost > 0) {
-                return (totalCost / totalTokens).toFixed(4);
-            } else if (totalTokens > 0) {
-                // 持仓大于0但成本为0的情况（如刚好全部卖出后又买入）
-                return "0.0000";
-            } else {
-                return "0.0000";
-            }
-        }
-
-        // 计算USDT盈亏
-        function calculateUSDTProfitLoss(averageCost, currentPrice, totalTokens, btcPrice) {
-            const currentValue = totalTokens * currentPrice;
-            const costBasis = totalTokens * averageCost;
-            const profitLossSats = currentValue - costBasis;
-            
-            // 将satoshi转换为USDT
-            const profitLossUSDT = (btcPrice / 100000000 * profitLossSats).toFixed(2);
-            const profitLossPercent = averageCost > 0 ? ((profitLossSats / costBasis) * 100).toFixed(2) : "0.00";
-            
-            return {
-                value: profitLossUSDT,
-                percent: profitLossPercent,
-                isPositive: profitLossSats >= 0
-            };
-        }
-
-        // 计算BTC盈亏
-        function calculateBTCProfitLoss(averageCost, currentPrice, totalTokens) {
-            const currentValue = totalTokens * currentPrice / 100000000;
-            const costBasis = totalTokens * averageCost / 100000000;
-            const profitLossBTC = (currentValue - costBasis).toFixed(8);
-            const profitLossPercent = averageCost > 0 ? (((currentValue - costBasis) / costBasis) * 100).toFixed(2) : "0.00";
-            
-            return {
-                value: profitLossBTC,
-                percent: profitLossPercent,
-                isPositive: (currentValue - costBasis) >= 0
-            };
-        }
-
-        // 计算USDT价值
-        function calculateUSDTValue(balance, floorPriceSats, btcPrice) {
-            const totalSats = parseFloat(balance) * parseFloat(floorPriceSats);
-            return (btcPrice / 100000000 * totalSats).toFixed(2);
-        }
-
-        // 计算BTC价值
-        function calculateBTCValue(balance, floorPriceSats) {
-            const totalSats = parseFloat(balance) * parseFloat(floorPriceSats);
-            return (totalSats / 100000000).toFixed(8);
-        }
-
-        // 数字动画效果
-        function animateNumberChange(elementId, newValue, isPercentage = false) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            
-            const oldValue = lastValues[elementId] || 0;
-            lastValues[elementId] = newValue;
-            
-            // 清除之前的动画类
-            element.classList.remove('number-up', 'number-down');
-            
-            // 添加动画效果
-            if (oldValue !== 0 && oldValue !== newValue) {
-                if (parseFloat(newValue) > parseFloat(oldValue)) {
-                    element.classList.add('number-up');
-                } else if (parseFloat(newValue) < parseFloat(oldValue)) {
-                    element.classList.add('number-down');
-                }
-            }
-            
-            // 更新显示的值
-            if (isPercentage) {
-                element.textContent = `${newValue}%`;
-            } else {
-                element.textContent = newValue;
-            }
-        }
-
-        // 渲染订单历史
-        function renderOrderHistory(orders) {
-            const container = document.getElementById('orderHistory');
-            
-            if (!orders || orders.length === 0) {
-                container.innerHTML = '<div class="error">暂无交易记录</div>';
+            if (!address) {
+                alert('请填写钱包地址');
                 return;
             }
-            
-            let html = `
+
+            const wallets = getWallets();
+
+            // 检查地址是否已存在
+            if (wallets.some(wallet => wallet.address === address)) {
+                alert('该钱包地址已存在');
+                return;
+            }
+
+            // 自动生成名称如果用户没有输入
+            const walletName = name || generateWalletName(wallets);
+
+            wallets.push({
+                name: walletName,
+                address: address
+                // 不再需要token字段
+            });
+
+            saveWallets(wallets);
+            renderAddressList();
+
+            // 清空表单
+            nameInput.value = '';
+            addressInput.value = '';
+
+            // 切换到新添加的钱包
+            const newIndex = wallets.length - 1;
+            localStorage.setItem('currentWalletIndex', newIndex);
+            updateAddressDisplay();
+            loadData();
+
+            // 关闭下拉菜单
+            addressDropdown.classList.remove('active');
+        });
+
+        // 初始化显示
+        updateAddressDisplay();
+
+        // 修复弹窗点击关闭问题 - 阻止弹窗内点击事件冒泡
+        addressDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // 点击其他地方关闭下拉菜单
+        document.addEventListener('click', () => {
+            addressDropdown.classList.remove('active');
+        });
+    }
+
+    // 价格显示切换
+    function initPriceToggle() {
+        const priceToggle = document.getElementById('priceToggle');
+        const priceDisplay = document.getElementById('priceDisplay');
+
+        // 从本地存储加载显示设置
+        const savedCurrency = localStorage.getItem('displayCurrency');
+        if (savedCurrency) {
+            displayCurrency = savedCurrency;
+            priceDisplay.textContent = displayCurrency;
+        }
+
+        // 切换价格显示
+        priceToggle.addEventListener('click', () => {
+            displayCurrency = displayCurrency === 'USDT' ? 'BTC' : 'USDT';
+            priceDisplay.textContent = displayCurrency;
+            localStorage.setItem('displayCurrency', displayCurrency);
+
+            // 重新计算并更新显示
+            updateDisplayWithCurrentData();
+        });
+    }
+
+    // 刷新设置
+    function initRefreshSettings() {
+        const refreshSettings = document.getElementById('refreshSettings');
+        const refreshDropdown = document.getElementById('refreshDropdown');
+
+        // 从本地存储加载刷新设置
+        const savedRefreshRate = localStorage.getItem('refreshRate');
+        if (savedRefreshRate) {
+            currentRefreshRate = parseInt(savedRefreshRate);
+            document.querySelector(`input[value="${savedRefreshRate}"]`).checked = true;
+        } else {
+            document.getElementById('refreshOff').checked = true;
+        }
+
+        // 设置自动刷新
+        setupAutoRefresh();
+
+        // 切换下拉菜单显示
+        refreshSettings.addEventListener('click', (e) => {
+            e.stopPropagation();
+            refreshDropdown.classList.toggle('active');
+        });
+
+        // 修复弹窗点击关闭问题 - 阻止弹窗内点击事件冒泡
+        refreshDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // 监听刷新设置变化
+        document.querySelectorAll('input[name="refreshInterval"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                currentRefreshRate = parseInt(e.target.value);
+                localStorage.setItem('refreshRate', currentRefreshRate);
+                setupAutoRefresh();
+                refreshDropdown.classList.remove('active');
+            });
+        });
+
+        // 点击其他地方关闭下拉菜单
+        document.addEventListener('click', () => {
+            refreshDropdown.classList.remove('active');
+        });
+    }
+
+    // 修改自动刷新设置函数
+    function setupAutoRefresh() {
+        if (refreshInterval) {
+            clearInterval(refreshInterval);
+            refreshInterval = null;
+        }
+
+        if (currentRefreshRate > 0) {
+            // 自动刷新时不更新交易历史
+            refreshInterval = setInterval(() => {
+                loadData(false);
+                loadMarketData();
+            }, currentRefreshRate);
+        }
+    }
+
+    // 将18位精度转换为正常数值
+    function fromWei(value) {
+        return (parseFloat(value) / 1e18).toFixed(4);
+    }
+
+    // 计算持仓平均成本
+    function calculateAverageCost(orders) {
+        // 按时间排序，确保按时间顺序处理交易
+        orders.sort((a, b) => new Date(a.completed_at_tm) - new Date(b.completed_at_tm));
+
+        let totalTokens = 0;
+        let totalCost = 0;
+
+        orders.forEach(order => {
+            const tokens = parseFloat(fromWei(order.total_amount));
+
+            if (order.type === 'buy') {
+                const cost = parseFloat(order.total_btc_amount);
+                // 累计总持仓和总成本
+                totalTokens += tokens;
+                totalCost += cost;
+            } else if (order.type === 'sell') {
+                // 对于卖出订单，我们需要按当前平均成本计算
+                if (totalTokens > 0) {
+                    const averageCost = totalCost / totalTokens;
+                    const soldCost = tokens * averageCost;
+                    totalTokens -= tokens;
+                    totalCost -= soldCost;
+
+                    // 确保持仓数量和成本不会为负数
+                    totalTokens = Math.max(0, totalTokens);
+                    totalCost = Math.max(0, totalCost);
+                }
+            }
+        });
+
+        // 如果还有持仓，计算平均成本；否则成本为0
+        if (totalTokens > 0 && totalCost > 0) {
+            return (totalCost / totalTokens).toFixed(4);
+        } else if (totalTokens > 0) {
+            // 持仓大于0但成本为0的情况（如刚好全部卖出后又买入）
+            return "0.0000";
+        } else {
+            return "0.0000";
+        }
+    }
+
+    // 计算USDT盈亏
+    function calculateUSDTProfitLoss(averageCost, currentPrice, totalTokens, btcPrice) {
+        const currentValue = totalTokens * currentPrice;
+        const costBasis = totalTokens * averageCost;
+        const profitLossSats = currentValue - costBasis;
+
+        // 将satoshi转换为USDT
+        const profitLossUSDT = (btcPrice / 100000000 * profitLossSats).toFixed(2);
+        const profitLossPercent = averageCost > 0 ? ((profitLossSats / costBasis) * 100).toFixed(2) : "0.00";
+
+        return {
+            value: profitLossUSDT,
+            percent: profitLossPercent,
+            isPositive: profitLossSats >= 0
+        };
+    }
+
+    // 计算BTC盈亏
+    function calculateBTCProfitLoss(averageCost, currentPrice, totalTokens) {
+        const currentValue = totalTokens * currentPrice / 100000000;
+        const costBasis = totalTokens * averageCost / 100000000;
+        const profitLossBTC = (currentValue - costBasis).toFixed(8);
+        const profitLossPercent = averageCost > 0 ? (((currentValue - costBasis) / costBasis) * 100).toFixed(2) : "0.00";
+
+        return {
+            value: profitLossBTC,
+            percent: profitLossPercent,
+            isPositive: (currentValue - costBasis) >= 0
+        };
+    }
+
+    // 计算USDT价值
+    function calculateUSDTValue(balance, floorPriceSats, btcPrice) {
+        const totalSats = parseFloat(balance) * parseFloat(floorPriceSats);
+        return (btcPrice / 100000000 * totalSats).toFixed(2);
+    }
+
+    // 计算BTC价值
+    function calculateBTCValue(balance, floorPriceSats) {
+        const totalSats = parseFloat(balance) * parseFloat(floorPriceSats);
+        return (totalSats / 100000000).toFixed(8);
+    }
+
+    // 数字动画效果
+    function animateNumberChange(elementId, newValue, isPercentage = false) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const oldValue = lastValues[elementId] || 0;
+        lastValues[elementId] = newValue;
+
+        // 清除之前的动画类
+        element.classList.remove('number-up', 'number-down');
+
+        // 添加动画效果
+        if (oldValue !== 0 && oldValue !== newValue) {
+            if (parseFloat(newValue) > parseFloat(oldValue)) {
+                element.classList.add('number-up');
+            } else if (parseFloat(newValue) < parseFloat(oldValue)) {
+                element.classList.add('number-down');
+            }
+        }
+
+        // 更新显示的值
+        if (isPercentage) {
+            element.textContent = `${newValue}%`;
+        } else {
+            element.textContent = newValue;
+        }
+    }
+
+    // 渲染订单历史
+    function renderOrderHistory(orders) {
+        const container = document.getElementById('orderHistory');
+
+        if (!orders || orders.length === 0) {
+            container.innerHTML = '<div class="error">暂无交易记录</div>';
+            return;
+        }
+
+        let html = `
                 <table>
                     <thead>
                         <tr>
@@ -1041,17 +1339,20 @@
                     </thead>
                     <tbody>
             `;
-            
-            // 按时间倒序排列
-            orders.sort((a, b) => new Date(b.completed_at_tm) - new Date(a.completed_at_tm));
-            
-            orders.forEach(order => {
-                const date = new Date(order.completed_at_tm);
-                const formattedDate = date.toLocaleDateString('zh-CN') + ' ' + date.toLocaleTimeString('zh-CN', {hour: '2-digit', minute:'2-digit'});
-                const typeClass = order.type === 'buy' ? 'type-buy' : 'type-sell';
-                const typeText = order.type === 'buy' ? '买入' : '卖出';
-                
-                html += `
+
+        // 按时间倒序排列
+        orders.sort((a, b) => new Date(b.completed_at_tm) - new Date(a.completed_at_tm));
+
+        orders.forEach(order => {
+            const date = new Date(order.completed_at_tm);
+            const formattedDate = date.toLocaleDateString('zh-CN') + ' ' + date.toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const typeClass = order.type === 'buy' ? 'type-buy' : 'type-sell';
+            const typeText = order.type === 'buy' ? '买入' : '卖出';
+
+            html += `
                     <tr>
                         <td>${formattedDate}</td>
                         <td><span class="${typeClass}">${typeText}</span></td>
@@ -1060,268 +1361,400 @@
                         <td>${parseFloat(order.per_token_sats).toFixed(4)}</td>
                     </tr>
                 `;
-            });
-            
-            html += '</tbody></table>';
-            container.innerHTML = html;
+        });
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    }
+
+    // 使用当前数据更新显示
+    function updateDisplayWithCurrentData() {
+        if (!window.currentData) return;
+
+        const {balanceData, averageCost, btcPrice, orderHistory} = window.currentData;
+
+        if (!balanceData || balanceData.length === 0) {
+            document.getElementById('currentBalance').textContent = '无持仓';
+            document.getElementById('currentCost').textContent = '';
+            document.getElementById('currentPrice').textContent = '--';
+            document.getElementById('priceInUSD').textContent = 'USDT价格: --';
+            document.getElementById('portfolioValue').textContent = '$0.00';
+            document.getElementById('profitLoss').textContent = '盈亏: $0.00';
+            return;
         }
 
-        // 使用当前数据更新显示
-        function updateDisplayWithCurrentData() {
-            if (!window.currentData) return;
-            
-            const { balanceData, averageCost, btcPrice, orderHistory } = window.currentData;
-            
-            if (!balanceData || balanceData.length === 0) {
-                document.getElementById('currentBalance').textContent = '无持仓';
-                document.getElementById('currentCost').textContent = '';
-                document.getElementById('currentPrice').textContent = '--';
-                document.getElementById('priceInUSD').textContent = 'USDT价格: --';
-                document.getElementById('portfolioValue').textContent = '$0.00';
-                document.getElementById('profitLoss').textContent = '盈亏: $0.00';
-                return;
-            }
-            
-            const balance = fromWei(balanceData[0].balance);
-            const currentPrice = parseFloat(balanceData[0].floor_price_sats);
-            const usdtValue = calculateUSDTValue(balance, currentPrice, btcPrice);
-            const btcValue = calculateBTCValue(balance, currentPrice);
-            const usdtPrice = (btcPrice / 100000000 * currentPrice).toFixed(6);
-            
-            // 更新当前持仓
-            animateNumberChange('currentBalance', `${balance} ACORNS`);
-            document.getElementById('currentCost').textContent = `持仓成本: ${averageCost} sats`;
-            
-            // 更新当前价格
-            animateNumberChange('currentPrice', `${currentPrice.toFixed(4)} sats`);
-            document.getElementById('priceInUSD').textContent = `USDT价格: $${usdtPrice}`;
-            
-            // 更新持仓价值 - 根据当前选择的货币显示
+        const balance = fromWei(balanceData[0].balance);
+        const currentPrice = parseFloat(balanceData[0].floor_price_sats);
+        const usdtValue = calculateUSDTValue(balance, currentPrice, btcPrice);
+        const btcValue = calculateBTCValue(balance, currentPrice);
+        const usdtPrice = (btcPrice / 100000000 * currentPrice).toFixed(6);
+
+        // 更新当前持仓
+        animateNumberChange('currentBalance', `${balance} ACORNS`);
+        document.getElementById('currentCost').textContent = `持仓成本: ${averageCost} sats`;
+
+        // 更新当前价格
+        animateNumberChange('currentPrice', `${currentPrice.toFixed(4)} sats`);
+        document.getElementById('priceInUSD').textContent = `USDT价格: $${usdtPrice}`;
+
+        // 更新持仓价值 - 根据当前选择的货币显示
+        if (displayCurrency === 'USDT') {
+            animateNumberChange('portfolioValue', `$${usdtValue} USDT`);
+        } else {
+            animateNumberChange('portfolioValue', `${btcValue} BTC`);
+        }
+
+        // 计算并显示盈亏 - 根据当前选择的货币显示
+        if (averageCost > 0) {
+            let profitLossText = '';
             if (displayCurrency === 'USDT') {
-                animateNumberChange('portfolioValue', `$${usdtValue} USDT`);
+                const profitLoss = calculateUSDTProfitLoss(
+                    parseFloat(averageCost),
+                    currentPrice,
+                    parseFloat(balance),
+                    btcPrice
+                );
+
+                const sign = profitLoss.isPositive ? '+' : '';
+                const colorClass = profitLoss.isPositive ? 'type-buy' : 'type-sell';
+                profitLossText = `盈亏: <span class="${colorClass}">${sign}$${profitLoss.value} USDT (${sign}${profitLoss.percent}%)</span>`;
             } else {
-                animateNumberChange('portfolioValue', `${btcValue} BTC`);
+                const profitLoss = calculateBTCProfitLoss(
+                    parseFloat(averageCost),
+                    currentPrice,
+                    parseFloat(balance)
+                );
+
+                const sign = profitLoss.isPositive ? '+' : '';
+                const colorClass = profitLoss.isPositive ? 'type-buy' : 'type-sell';
+                profitLossText = `盈亏: <span class="${colorClass}">${sign}${profitLoss.value} BTC (${sign}${profitLoss.percent}%)</span>`;
             }
-            
-            // 计算并显示盈亏 - 根据当前选择的货币显示
-            if (averageCost > 0) {
-                let profitLossText = '';
-                if (displayCurrency === 'USDT') {
-                    const profitLoss = calculateUSDTProfitLoss(
-                        parseFloat(averageCost), 
-                        currentPrice, 
-                        parseFloat(balance),
-                        btcPrice
-                    );
-                    
-                    const sign = profitLoss.isPositive ? '+' : '';
-                    const colorClass = profitLoss.isPositive ? 'type-buy' : 'type-sell';
-                    profitLossText = `盈亏: <span class="${colorClass}">${sign}$${profitLoss.value} USDT (${sign}${profitLoss.percent}%)</span>`;
-                } else {
-                    const profitLoss = calculateBTCProfitLoss(
-                        parseFloat(averageCost), 
-                        currentPrice, 
-                        parseFloat(balance)
-                    );
-                    
-                    const sign = profitLoss.isPositive ? '+' : '';
-                    const colorClass = profitLoss.isPositive ? 'type-buy' : 'type-sell';
-                    profitLossText = `盈亏: <span class="${colorClass}">${sign}${profitLoss.value} BTC (${sign}${profitLoss.percent}%)</span>`;
-                }
-                document.getElementById('profitLoss').innerHTML = profitLossText;
+            document.getElementById('profitLoss').innerHTML = profitLossText;
+        } else {
+            if (displayCurrency === 'USDT') {
+                document.getElementById('profitLoss').textContent = '盈亏: $0.00 USDT';
             } else {
-                if (displayCurrency === 'USDT') {
-                    document.getElementById('profitLoss').textContent = '盈亏: $0.00 USDT';
-                } else {
-                    document.getElementById('profitLoss').textContent = '盈亏: 0.00000000 BTC';
-                }
-            }
-            
-            // 更新BTC价格显示
-            document.getElementById('btcPriceDisplay').textContent = `BTC: $${btcPrice.toLocaleString()}`;
-        }
-
-        // 获取BTC价格
-        async function fetchBTCPrice() {
-            try {
-                const response = await fetch("https://www.maxweb.systems/api/v3/ticker/price?symbol=BTCUSDT");
-                
-                if (!response.ok) {
-                    throw new Error(`BTC价格API请求失败: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                return parseFloat(data.price);
-            } catch (error) {
-                console.error('获取BTC价格失败:', error);
-                // 返回默认价格
-                return 89882.25;
+                document.getElementById('profitLoss').textContent = '盈亏: 0.00000000 BTC';
             }
         }
 
-        // 获取订单历史数据
-        async function fetchOrderHistory(walletAddress) {
-            try {
-                const response = await fetch("https://orderbook-api.bestinslot.xyz/get_order_history_of_wallet_by_token", {
-                    "headers": {
-                        "accept": "*/*",
-                        "accept-language": "zh-CN,zh;q=0.9",
-                        "cache-control": "no-cache",
-                        "content-type": "application/json",
-                        "pragma": "no-cache",
-                        "priority": "u=1, i",
-                        "sec-ch-ua": "\"Chromium\";v=\"142\", \"Google Chrome\";v=\"142\", \"Not_A Brand\";v=\"99\"",
-                        "sec-ch-ua-mobile": "?0",
-                        "sec-ch-ua-platform": "\"Windows\"",
-                        "sec-fetch-dest": "empty",
-                        "sec-fetch-mode": "cors",
-                        "sec-fetch-site": "same-site"
-                    },
-                    "body": JSON.stringify({
-                        "ordinal_address": walletAddress,
-                        "token_address": "0x4aa8e9ca6d90e2e47b44336aa4725894332c1b16" // 固定代币地址
-                    }),
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "omit"
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API请求失败: ${response.status}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error('获取订单历史失败:', error);
-                throw error;
+        // 更新BTC价格显示
+        document.getElementById('btcPriceDisplay').textContent = `BTC: $${btcPrice.toLocaleString()}`;
+    }
+
+
+    // 获取市场数据
+    async function fetchMarketData() {
+        try {
+            const response = await fetch("http://proxy.venc.cn/proxy/https://v2api.bestinslot.xyz/watchlist?brc2_0=acorns")
+
+            if (!response.ok) {
+                throw new Error(`市场数据API请求失败: ${response.status}`);
             }
+
+            const data = await response.json();
+            return data.brc2_0[0]; // 返回ACORNS数据
+        } catch (error) {
+            console.error('获取市场数据失败:', error);
+            throw error;
+        }
+    }
+
+    // 渲染市场数据
+    function renderMarketData(marketData) {
+        const container = document.getElementById('marketData');
+
+        if (!marketData) {
+            container.innerHTML = '<div class="error">市场数据加载失败</div>';
+            return;
         }
 
-        // 获取持仓数据
-        async function fetchBalance(walletAddress) {
-            try {
-                const response = await fetch("https://orderbook-api.bestinslot.xyz/get_brc2_0_balances_of_wallet", {
-                    "headers": {
-                        "accept": "*/*",
-                        "accept-language": "zh-CN,zh;q=0.9",
-                        "cache-control": "no-cache",
-                        "content-type": "application/json",
-                        "pragma": "no-cache",
-                        "priority": "u=1, i",
-                        "sec-ch-ua": "\"Chromium\";v=\"142\", \"Google Chrome\";v=\"142\", \"Not_A Brand\";v=\"99\"",
-                        "sec-ch-ua-mobile": "?0",
-                        "sec-ch-ua-platform": "\"Windows\"",
-                        "sec-fetch-dest": "empty",
-                        "sec-fetch-mode": "cors",
-                        "sec-fetch-site": "same-site"
-                    },
-                    "body": JSON.stringify({
-                        "ordinal_address": walletAddress
-                    }),
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "omit"
-                });
+        const {
+            min_listed_unit_price,
+            avg_price,
+            holder_count,
+            market_cap,
+            supply,
+            volume,
+            price_change
+        } = marketData;
+
+        // 格式化数字
+        const formatNumber = (num) => {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(2) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(2) + 'K';
+            }
+            return num.toLocaleString();
+        };
+
+        const formatMarketCap = (cap) => {
+            return (cap / 100000000).toFixed(2) + ' BTC';
+        };
+
+        const html = `
+                <div class="market-overview">
+                    <div class="market-item">
+                        <div class="market-label">当前价格</div>
+                        <div class="market-value">${avg_price.toFixed(4)} sats</div>
+                        <div class="market-change ${price_change.d1 >= 0 ? 'change-positive' : 'change-negative'}">
+                            24h: ${price_change.d1 >= 0 ? '+' : ''}${price_change.d1.toFixed(2)}%
+                        </div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-label">最低挂单</div>
+                        <div class="market-value">${min_listed_unit_price.toFixed(4)} sats</div>
+                        <div class="market-change ${price_change.d7 >= 0 ? 'change-positive' : 'change-negative'}">
+                            7d: ${price_change.d7 >= 0 ? '+' : ''}${price_change.d7.toFixed(2)}%
+                        </div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-label">市值</div>
+                        <div class="market-value">${formatMarketCap(market_cap)}</div>
+                        <div class="market-change ${price_change.d30 >= 0 ? 'change-positive' : 'change-negative'}">
+                            30d: ${price_change.d30 >= 0 ? '+' : ''}${price_change.d30.toFixed(2)}%
+                        </div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-label">持有者</div>
+                        <div class="market-value">${formatNumber(holder_count)}</div>
+                        <div class="market-change">完全铸造</div>
+                    </div>
+                </div>
                 
-                if (!response.ok) {
-                    throw new Error(`API请求失败: ${response.status}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error('获取持仓数据失败:', error);
-                throw error;
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">${formatNumber(supply.current)}</div>
+                        <div class="stat-label">总供应量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${(supply.listed_ratio * 100).toFixed(2)}%</div>
+                        <div class="stat-label">挂单比例</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${formatNumber(volume.d1)}</div>
+                        <div class="stat-label">24h交易量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${formatNumber(volume.d7)}</div>
+                        <div class="stat-label">7d交易量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${formatNumber(volume.d30)}</div>
+                        <div class="stat-label">30d交易量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${formatNumber(volume.all)}</div>
+                        <div class="stat-label">总交易量</div>
+                    </div>
+                </div>
+            `;
+
+        container.innerHTML = html;
+    }
+
+    // 加载市场数据
+    async function loadMarketData() {
+        try {
+            const marketData = await fetchMarketData();
+            renderMarketData(marketData);
+
+            // 更新最后刷新时间
+            const now = new Date();
+            document.getElementById('marketLastUpdate').textContent =
+                `最后更新: ${now.toLocaleTimeString('zh-CN')}`;
+
+        } catch (error) {
+            console.error('加载市场数据失败:', error);
+            document.getElementById('marketData').innerHTML =
+                `<div class="error">市场数据加载失败: ${error.message}</div>`;
+        }
+    }
+
+    // 获取BTC价格
+    async function fetchBTCPrice() {
+        try {
+            const response = await fetch("https://www.maxweb.systems/api/v3/ticker/price?symbol=BTCUSDT");
+
+            if (!response.ok) {
+                throw new Error(`BTC价格API请求失败: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return parseFloat(data.price);
+        } catch (error) {
+            console.error('获取BTC价格失败:', error);
+            // 返回默认价格
+            return 89882.25;
+        }
+    }
+
+    // 获取订单历史数据
+    async function fetchOrderHistory(walletAddress) {
+        try {
+            const response = await fetch("https://orderbook-api.bestinslot.xyz/get_order_history_of_wallet_by_token", {
+                "headers": {
+                    "accept": "*/*",
+                    "accept-language": "zh-CN,zh;q=0.9",
+                    "cache-control": "no-cache",
+                    "content-type": "application/json",
+                    "pragma": "no-cache",
+                    "priority": "u=1, i",
+                    "sec-ch-ua": "\"Chromium\";v=\"142\", \"Google Chrome\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+                    "sec-ch-ua-mobile": "?0",
+                    "sec-ch-ua-platform": "\"Windows\"",
+                    "sec-fetch-dest": "empty",
+                    "sec-fetch-mode": "cors",
+                    "sec-fetch-site": "same-site"
+                },
+                "body": JSON.stringify({
+                    "ordinal_address": walletAddress,
+                    "token_address": "0x4aa8e9ca6d90e2e47b44336aa4725894332c1b16" // 固定代币地址
+                }),
+                "method": "POST",
+                "mode": "cors",
+                "credentials": "omit"
+            });
+
+            if (!response.ok) {
+                throw new Error(`API请求失败: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('获取订单历史失败:', error);
+            throw error;
+        }
+    }
+
+    // 获取持仓数据
+    async function fetchBalance(walletAddress) {
+        try {
+            const response = await fetch("https://orderbook-api.bestinslot.xyz/get_brc2_0_balances_of_wallet", {
+                "headers": {
+                    "accept": "*/*",
+                    "accept-language": "zh-CN,zh;q=0.9",
+                    "cache-control": "no-cache",
+                    "content-type": "application/json",
+                    "pragma": "no-cache",
+                    "priority": "u=1, i",
+                    "sec-ch-ua": "\"Chromium\";v=\"142\", \"Google Chrome\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+                    "sec-ch-ua-mobile": "?0",
+                    "sec-ch-ua-platform": "\"Windows\"",
+                    "sec-fetch-dest": "empty",
+                    "sec-fetch-mode": "cors",
+                    "sec-fetch-site": "same-site"
+                },
+                "body": JSON.stringify({
+                    "ordinal_address": walletAddress
+                }),
+                "method": "POST",
+                "mode": "cors",
+                "credentials": "omit"
+            });
+
+            if (!response.ok) {
+                throw new Error(`API请求失败: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('获取持仓数据失败:', error);
+            throw error;
+        }
+    }
+
+    // 加载数据
+    async function loadData(updateHistory = true) {
+        const orderHistoryElement = document.getElementById('orderHistory');
+        const currentWallet = getCurrentWallet();
+
+        // 检查是否有选中的钱包
+        if (!currentWallet) {
+            orderHistoryElement.innerHTML = '<div class="error">请先添加钱包地址</div>';
+            document.getElementById('currentBalance').textContent = '无持仓';
+            document.getElementById('currentCost').textContent = '';
+            document.getElementById('currentPrice').textContent = '--';
+            document.getElementById('priceInUSD').textContent = 'USDT价格: --';
+            document.getElementById('portfolioValue').textContent = '$0.00';
+            document.getElementById('profitLoss').textContent = '盈亏: $0.00';
+            return;
+        }
+
+        // 只在首次加载时显示加载状态
+        if (updateHistory) {
+            orderHistoryElement.innerHTML = '<div class="loading"><div class="loading-spinner"></div>加载交易数据中...</div>';
+        }
+
+        try {
+            // 同时请求BTC价格和余额数据
+            const [btcPrice, balanceData] = await Promise.all([
+                fetchBTCPrice(),
+                fetchBalance(currentWallet.address)
+            ]);
+
+            // 只在需要时加载交易历史（首次加载或手动刷新时）
+            let orderHistory;
+            if (updateHistory || !window.currentData?.orderHistory) {
+                orderHistory = await fetchOrderHistory(currentWallet.address);
+            } else {
+                orderHistory = window.currentData.orderHistory;
+            }
+
+            // 计算平均成本
+            const averageCost = calculateAverageCost(orderHistory);
+
+            // 保存当前数据
+            window.currentData = {
+                balanceData,
+                averageCost,
+                btcPrice,
+                orderHistory
+            };
+
+            // 更新UI
+            if (updateHistory) {
+                renderOrderHistory(orderHistory);
+            }
+            updateDisplayWithCurrentData();
+
+            // 更新最后刷新时间
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent =
+                `最后更新: ${now.toLocaleTimeString('zh-CN')}`;
+
+        } catch (error) {
+            console.error('加载数据失败:', error);
+            if (updateHistory) {
+                document.getElementById('orderHistory').innerHTML =
+                    `<div class="error">数据加载失败: ${error.message}</div>`;
             }
         }
+    }
+
+    // 初始化页面
+    function initPage() {
+        // 初始化地址选择器
+        initAddressSelector();
+
+        // 初始化价格显示切换
+        initPriceToggle();
+
+        // 初始化刷新设置
+        initRefreshSettings();
 
         // 加载数据
-        async function loadData(updateHistory = true) {
-            const orderHistoryElement = document.getElementById('orderHistory');
-            const currentWallet = getCurrentWallet();
+        loadData(true);
+        loadMarketData();
 
-            // 检查是否有选中的钱包
-            if (!currentWallet) {
-                orderHistoryElement.innerHTML = '<div class="error">请先添加钱包地址</div>';
-                document.getElementById('currentBalance').textContent = '无持仓';
-                document.getElementById('currentCost').textContent = '';
-                document.getElementById('currentPrice').textContent = '--';
-                document.getElementById('priceInUSD').textContent = 'USDT价格: --';
-                document.getElementById('portfolioValue').textContent = '$0.00';
-                document.getElementById('profitLoss').textContent = '盈亏: $0.00';
-                return;
-            }
+        // 绑定刷新按钮事件
+        document.getElementById('refreshData').addEventListener('click', loadData);
+        document.getElementById('refreshMarketData').addEventListener('click', loadMarketData);
+    }
 
-            // 只在首次加载时显示加载状态
-            if (updateHistory) {
-                orderHistoryElement.innerHTML = '<div class="loading">加载交易数据中...</div>';
-            }
-
-            try {
-                // 同时请求BTC价格和余额数据
-                const [btcPrice, balanceData] = await Promise.all([
-                    fetchBTCPrice(),
-                    fetchBalance(currentWallet.address)
-                ]);
-
-                // 只在需要时加载交易历史（首次加载或手动刷新时）
-                let orderHistory;
-                if (updateHistory || !window.currentData?.orderHistory) {
-                    orderHistory = await fetchOrderHistory(currentWallet.address);
-                } else {
-                    orderHistory = window.currentData.orderHistory;
-                }
-
-                // 计算平均成本
-                const averageCost = calculateAverageCost(orderHistory);
-
-                // 保存当前数据
-                window.currentData = {
-                    balanceData,
-                    averageCost,
-                    btcPrice,
-                    orderHistory
-                };
-
-                // 更新UI
-                if (updateHistory) {
-                    renderOrderHistory(orderHistory);
-                }
-                updateDisplayWithCurrentData();
-
-                // 更新最后刷新时间
-                const now = new Date();
-                document.getElementById('lastUpdate').textContent =
-                    `最后更新: ${now.toLocaleTimeString('zh-CN')}`;
-
-            } catch (error) {
-                console.error('加载数据失败:', error);
-                if (updateHistory) {
-                    document.getElementById('orderHistory').innerHTML =
-                        `<div class="error">数据加载失败: ${error.message}</div>`;
-                }
-            }
-        }
-
-        // 初始化页面
-        function initPage() {
-            // 初始化地址选择器
-            initAddressSelector();
-            
-            // 初始化价格显示切换
-            initPriceToggle();
-            
-            // 初始化刷新设置
-            initRefreshSettings();
-            
-            // 加载数据
-            loadData(true);
-            
-            // 绑定刷新按钮事件
-            document.getElementById('refreshData').addEventListener('click', loadData);
-        }
-
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', initPage);
-    </script>
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', initPage);
+</script>
 </body>
 </html>
