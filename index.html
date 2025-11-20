@@ -121,8 +121,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .dropdown.active {
@@ -410,8 +416,12 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .error {
@@ -556,15 +566,27 @@
         }
 
         @keyframes pulseGreen {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes pulseRed {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* 价格趋势指示器 */
@@ -597,11 +619,25 @@
         }
 
         /* 延迟动画 */
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-5 {
+            animation-delay: 0.5s;
+        }
 
         @media (max-width: 768px) {
             .container {
@@ -1446,7 +1482,19 @@
     // 获取市场数据
     async function fetchMarketData() {
         try {
-            const response = await fetch("http://proxy.venc.cn/proxy/https://v2api.bestinslot.xyz/watchlist?brc2_0=acorns")
+            const response = await fetch("https://proxy.venc.cn/proxy/https://v2api.bestinslot.xyz/watchlist?brc2_0=acorns", {
+                "headers": {
+                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                    "accept-language": "zh-CN,zh;q=0.9",
+                    "cache-control": "no-cache",
+                    "pragma": "no-cache",
+                    "upgrade-insecure-requests": "1"
+                },
+                "body": null,
+                "method": "GET",
+                "mode": "cors",
+                "credentials": "omit"
+            });
 
             if (!response.ok) {
                 throw new Error(`市场数据API请求失败: ${response.status}`);
